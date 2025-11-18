@@ -50,46 +50,53 @@ public class Check {
     }
 
     // Ввод упорядоченного списка
-    // isNumeric = true для чисел (целые или вещественные), false для строк
-    public static List<String> inputOrderedList(Scanner scanner, String message, boolean isNumeric) {
+    public static List<String> inputOrderedList(Scanner scanner, String message, boolean isNumbers) {
         while (true) {
             System.out.println(message);
-            String[] input = scanner.nextLine().split(" ");
+            System.out.println("Введите элементы через пробел:");
+
+            String line = scanner.nextLine().trim();
+            if (line.isEmpty()) {
+                System.out.println("Ошибка! Список не может быть пустым.");
+                continue;
+            }
+
+            String[] parts = line.split("\\s+");
             List<String> list = new ArrayList<>();
-            for (String s : input) list.add(s.trim());
+            boolean ok = true;
 
-            boolean ordered = true;
-
-            if (isNumeric) {
-                // Проверка числового порядка (целые и вещественные)
+            if (isNumbers) {
+                // Проверка, что все элементы — числа
                 try {
+                    for (String p : parts) {
+                        Integer.parseInt(p);
+                        list.add(p);
+                    }
+                    // Проверка на возрастание
                     for (int i = 1; i < list.size(); i++) {
-                        double prev = Double.parseDouble(list.get(i - 1));
-                        double curr = Double.parseDouble(list.get(i));
-                        if (curr < prev) {
-                            ordered = false;
+                        if (Integer.parseInt(list.get(i)) < Integer.parseInt(list.get(i - 1))) {
+                            System.out.println("Ошибка! Числа должны быть по возрастанию.");
+                            ok = false;
                             break;
                         }
                     }
                 } catch (NumberFormatException e) {
                     System.out.println("Ошибка! Введите только числа.");
-                    continue;
+                    ok = false;
                 }
             } else {
-                // Проверка порядка по длине строк
+                // Проверка строк по длине
+                for (String p : parts) list.add(p);
                 for (int i = 1; i < list.size(); i++) {
                     if (list.get(i).length() < list.get(i - 1).length()) {
-                        ordered = false;
+                        System.out.println("Ошибка! Строки должны быть упорядочены по длине.");
+                        ok = false;
                         break;
                     }
                 }
             }
 
-            if (!ordered) {
-                System.out.println("Ошибка! Элементы не упорядочены по условию.");
-            } else {
-                return list;
-            }
+            if (ok) return list; // возвращаем корректный список
         }
     }
 }
