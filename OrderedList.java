@@ -1,34 +1,30 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class OrderedList {
 
-    // Объединение двух упорядоченных списков
-    public static List<String> mergeLists(List<String> L1, List<String> L2, boolean isNumeric) {
-        List<String> merged = new ArrayList<>();
+    public static <T> List<T> mergeLists(List<T> list1, List<T> list2, Comparator<T> comp) {
+        List<T> result = new ArrayList<>();
         int i = 0, j = 0;
 
-        while (i < L1.size() && j < L2.size()) {
-            boolean takeFromL1;
-
-            if (isNumeric) {
-                double val1 = Double.parseDouble(L1.get(i));
-                double val2 = Double.parseDouble(L2.get(j));
-                takeFromL1 = val1 <= val2;
+        while (i < list1.size() && j < list2.size()) {
+            if (comp.compare(list1.get(i), list2.get(j)) <= 0) {
+                result.add(list1.get(i));
+                i++;
             } else {
-                // Сравнение строк по длине
-                takeFromL1 = L1.get(i).length() <= L2.get(j).length();
-            }
-
-            if (takeFromL1) {
-                merged.add(L1.get(i++));
-            } else {
-                merged.add(L2.get(j++));
+                result.add(list2.get(j));
+                j++;
             }
         }
 
-        while (i < L1.size()) merged.add(L1.get(i++));
-        while (j < L2.size()) merged.add(L2.get(j++));
-        return merged;
+        while (i < list1.size()) {
+            result.add(list1.get(i++));
+        }
+        while (j < list2.size()) {
+            result.add(list2.get(j++));
+        }
+
+        return result;
     }
 }
