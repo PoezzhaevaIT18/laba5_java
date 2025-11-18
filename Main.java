@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -39,16 +41,19 @@ public class Main {
                 break;
             }
             case 3: {
-                System.out.println("Работа с числами: ");
+                System.out.println("Работа с числами:");
                 List<String> L1 = Check.inputOrderedList(scanner, "Введите элементы первого списка L1 (по возрастанию):", true);
                 List<String> L2 = Check.inputOrderedList(scanner, "Введите элементы второго списка L2 (по возрастанию):", true);
-                List<String> mergedNumbers = OrderedList.mergeLists(L1, L2, true);
+                Comparator<String> numberComparator = (a, b) -> Integer.parseInt(a) - Integer.parseInt(b);
+                List<String> mergedNumbers = OrderedList.mergeLists(L1, L2, numberComparator);
                 System.out.println("Объединённый список чисел:");
                 for (String s : mergedNumbers) System.out.print(s + " ");
-                System.out.println("\nРабота со строками: ");
-                List<String> S1 = Check.inputOrderedList(scanner, "Введите элементы первого списка S1 (по возрастанию):", false);
-                List<String> S2 = Check.inputOrderedList(scanner, "Введите элементы второго списка S2 (по возрастанию):", false);
-                List<String> mergedStrings = OrderedList.mergeLists(S1, S2, false);
+                System.out.println();
+                System.out.println("Работа со строками:");
+                List<String> S1 = Check.inputOrderedList(scanner, "Введите элементы первого списка S1 (по возрастанию длины):", false);
+                List<String> S2 = Check.inputOrderedList(scanner, "Введите элементы второго списка S2 (по возрастанию длины):", false);
+                Comparator<String> stringComparator = (a, b) -> a.length() - b.length();
+                List<String> mergedStrings = OrderedList.mergeLists(S1, S2, stringComparator);
                 System.out.println("Объединённый список строк:");
                 for (String s : mergedStrings) System.out.print(s + " ");
                 System.out.println();
